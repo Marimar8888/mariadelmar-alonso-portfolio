@@ -24,8 +24,8 @@ export default class PortfolioItem extends Component {
 
     return (
       <div className="portfolio-item-wrapper"
-      onMouseEnter={() => this.handleMouseEnter()}
-      onMouseLeave={() => this.handleMouseLeave()}>
+        onMouseEnter={() => this.handleMouseEnter()}
+        onMouseLeave={() => this.handleMouseLeave()}>
         <div
           className={"portfolio-img-background " + this.state.portfolioItemClass}
           style={{
