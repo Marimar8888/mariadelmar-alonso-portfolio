@@ -133,8 +133,8 @@ export default class PortfolioForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit} className='portfolio-form-wrapper'>
-                <div>
+            <form onSubmit={this.handleSubmit} className="portfolio-form-wrapper">
+                <div className='two-column'>
                     <input
                         type="text"
                         name="name"
@@ -149,6 +149,8 @@ export default class PortfolioForm extends Component {
                         value={this.state.url}
                         onChange={this.handleChange}
                     />
+                </div>
+                <div className='two-column'>
                     <input
                         type="text"
                         name="position"
@@ -169,7 +171,7 @@ export default class PortfolioForm extends Component {
                     </select>
                 </div>
 
-                <div>
+                <div className='one-column'>
                     <textarea
                         type="text"
                         name="description"
@@ -179,7 +181,7 @@ export default class PortfolioForm extends Component {
                     />
                 </div>
 
-                <div>
+                <div className='three-column'>
                     <DropzoneComponent
                         ref={this.thumRef}
                         config={this.componentConfig()}
