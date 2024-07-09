@@ -19,10 +19,18 @@ export default class App extends Component {
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN"
     };
-
+    this.checkLoginStatus = this.checkLoginStatus.bind(this);
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
+  }
+  componentDidMount() {
+    this._isMounted = true;
+    this.checkLoginStatus();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleSuccessfulLogin() {
@@ -43,12 +51,15 @@ export default class App extends Component {
     });
   }
 
+
   checkLoginStatus() {
+    if (!this._isMounted) return;
     return axios
       .get("https://api.devcamp.space/logged_in", {
         withCredentials: true
       })
       .then(response => {
+        if (!this._isMounted) return;
         const loggedIn = response.data.logged_in;
         const loggedInStatus = this.state.loggedInStatus;
 
