@@ -9,11 +9,26 @@ export default class PortfolioManager extends Component {
     super();
 
     this.state = {
-      portfolioItems: []
+      portfolioItems: [],
+      portfolioToEdit: {}
     };
     this.handleSuccessfulFormSubmission = this.handleSuccessfulFormSubmission.bind(this);
     this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
+    this.handleEditClick = this. handleEditClick.bind(this);
+    this.clearPortfolioToEdit = this.clearPortfolioToEdit.bind(this);
+  }
+
+  clearPortfolioToEdit() {
+    this.setState({
+      portfolioToEdit: {}
+    });
+  }
+
+  handleEditClick(portfolioItem){
+    this.setState({
+      portfolioToEdit: portfolioItem
+    })
   }
 
   handleDeleteClick(portfolioItem) {
@@ -34,11 +49,30 @@ export default class PortfolioManager extends Component {
         console.log("handleDeleteClick error", error);
       });
   }
-  handleSuccessfulFormSubmission(portfolioItem){
+
+/*   handleSuccessfulFormSubmission(portfolioItem){
     this.setState({
       portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
     });
-  }
+  }  */
+ 
+  handleSuccessfulFormSubmission(portfolioItem) {
+      this.setState(prevState => {
+          const itemExists = prevState.portfolioItems.some(item => item.id === portfolioItem.id);
+  
+          if (itemExists) {
+              return {
+                  portfolioItems: prevState.portfolioItems.map(item => {
+                      return item.id === portfolioItem.id ? portfolioItem : item;
+                  })
+              };
+          } else {
+              return {
+                  portfolioItems:   [portfolioItem].concat(this.state.portfolioItems)
+              };
+          }0
+      });
+  }  
 
   handleFormSubmissionError(error){
     console.log("handleFormSubmissionError error ", error);
@@ -46,7 +80,7 @@ export default class PortfolioManager extends Component {
 
   getPortfolioItems() {
     axios
-      .get("https://alonsomarimar.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc", {
+      .get(`https://alonsomarimar.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc`, {
           withCredentials: true
         })
       .then(response => {
@@ -70,12 +104,16 @@ export default class PortfolioManager extends Component {
             <PortfolioForm
               handleSuccessfulFormSubmission={this.handleSuccessfulFormSubmission}
               handleFormSubmissionError={this.handleFormSubmissionError}
+              clearPortfolioToEdit = {this.clearPortfolioToEdit}
+              portfolioToEdit = {this.state.portfolioToEdit}
             />
         </div>
         <div className="right-column">
           <PortfolioSidebarList 
             handleDeleteClick={this.handleDeleteClick}
-            data= {this.state.portfolioItems}/>
+            data= {this.state.portfolioItems}
+            handleEditClick={this.handleEditClick}  
+          />
         </div>
       </div>
     );
