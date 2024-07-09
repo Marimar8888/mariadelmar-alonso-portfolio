@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import NavigationContainer from "./navigation/navigation-container";
 import Home from "./pages/home";
@@ -12,6 +15,8 @@ import Auth from "./pages/auth";
 import NoMatch from "./pages/no-match";
 import PortfolioManager from "./pages/portfolio-manager";
 
+library.add(faTrash, faSignOutAlt);
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -19,20 +24,16 @@ export default class App extends Component {
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN"
     };
-    this.checkLoginStatus = this.checkLoginStatus.bind(this);
+    
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
   }
+
   componentDidMount() {
-    this._isMounted = true;
     this.checkLoginStatus();
   }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
+  
   handleSuccessfulLogin() {
     this.setState({
       loggedInStatus: "LOGGED_IN"
@@ -53,13 +54,11 @@ export default class App extends Component {
 
 
   checkLoginStatus() {
-    if (!this._isMounted) return;
-    return axios
+     return axios
       .get("https://api.devcamp.space/logged_in", {
         withCredentials: true
       })
       .then(response => {
-        if (!this._isMounted) return;
         const loggedIn = response.data.logged_in;
         const loggedInStatus = this.state.loggedInStatus;
 
@@ -80,9 +79,6 @@ export default class App extends Component {
       });
   }
 
-  componentDidMount() {
-    this.checkLoginStatus();
-  }
 
   authorizedPages(){
     return [<Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager} />];
