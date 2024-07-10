@@ -137,28 +137,33 @@ export default class PortfolioForm extends Component {
             withCredentials: true
         })
             .then(response => {
-                this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
-
-            })
-            .catch(error => {
+                if(this.state.editMode){
+                    this.props.handleEditFormSubmission();
+                }else{
+                    this.props.handleNewFormSubmission(response.data.portfolio_item);
+                }
+                this.setState({
+                    name: "",
+                    description: "",
+                    category: "Website",
+                    position: "",
+                    url: "",
+                    thumb_image: "",
+                    banner_image: "",
+                    logo: "",
+                    editMode: false,
+                    apiUrl: "https://alonsomarimar.devcamp.space/portfolio/portfolio_items",
+                    apiAction: "post"
+                });
+        
+                [this.thumbRef, this.bannerRef, this.logoRef].forEach(ref => {
+                  ref.current.dropzone.removeAllFiles();
+                });
+              })
+              .catch(error => {
                 console.log("portfolio form handleSubmit error", error);
-            });
-
-        this.setState({
-            name: "",
-            description: "",
-            category: "Website",
-            position: "",
-            url: "",
-            thumb_image: "",
-            banner_image: "",
-            logo: ""
-        });
-
-        [this.thumRef, this.bannerRef, this.logoRef].forEach(ref => {
-            ref.current.dropzone.removeAllFiles();
-        });
-
+              });
+        
         event.preventDefault();
     }
 
