@@ -32,7 +32,7 @@ export default class PortfolioForm extends Component {
         this.handleBannerDrop = this.handleBannerDrop.bind(this);
         this.handleLogoDrop = this.handleLogoDrop.bind(this);
 
-        this.thumRef = React.createRef();
+        this.thumbRef = React.createRef();
         this.bannerRef = React.createRef();
         this.logoRef = React.createRef();
 
@@ -221,7 +221,7 @@ export default class PortfolioForm extends Component {
 
                 <div className='image-uploaders'>
                     <DropzoneComponent
-                        ref={this.thumRef}
+                        ref={this.thumbRef}
                         config={this.componentConfig()}
                         djsConfig={this.djsConfig()}
                         eventHandlers={this.handleThumbDrop()}
