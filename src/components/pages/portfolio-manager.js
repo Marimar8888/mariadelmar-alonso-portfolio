@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 import PortfolioSidebarList from "../portfolio/portfolio-sidebar-list";
 import PortfolioForm from "../portfolio/portfolio-form";
@@ -12,6 +12,7 @@ export default class PortfolioManager extends Component {
       portfolioItems: [],
       portfolioToEdit: {}
     };
+
     this.handleNewFormSubmission = this.handleNewFormSubmission.bind(this);
     this.handleEditFormSubmission = this.handleEditFormSubmission.bind(this);
     this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
@@ -43,7 +44,7 @@ export default class PortfolioManager extends Component {
             return item.id !== portfolioItem.id;
           })
         });
-
+      
         return response.data;
       })
       .catch(error => {
@@ -60,7 +61,7 @@ export default class PortfolioManager extends Component {
       portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
     });
   }
-  
+
   handleFormSubmissionError(error) {
     console.log("handleFormSubmissionError error", error);
   }
