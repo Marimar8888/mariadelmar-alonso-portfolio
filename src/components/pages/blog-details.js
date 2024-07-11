@@ -26,7 +26,6 @@ export default class BlogDetails extends Component {
       });
   }
 
-  
   componentDidMount() {
     this.getBlogItem();
   }
@@ -41,12 +40,13 @@ export default class BlogDetails extends Component {
     } = this.state.blogItem;
 
     return (
-      <div>
-        <h1>{title}</h1>
-
-        <img src={featured_image_url} alt="Featured" />
-        <div>
-          {content}
+      <div className='blog-container'>
+        <div className='content-container'>
+          <h1>{title}</h1>
+          <div className='featured-image-wrapper '>
+            <img src={featured_image_url} alt="Featured" />
+          </div>
+          <div className='content'>{content}</div>
         </div>
       </div>
     )
