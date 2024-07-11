@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const blogItem = props => {
@@ -9,11 +10,13 @@ const blogItem = props => {
     blog_status,
     featured_image
 
-  }= props.blogItem
+  }= props.blogItem;
   
   return (
     <div>
-      <h1>{title}</h1>
+      <Link to={`/b/${id}`}>
+        <h1>{title}</h1>
+      </Link>
       <div>{content}</div>
     </div>
   );
