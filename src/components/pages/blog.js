@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+
+import BlogItem from "../blog/blog-item";
+import blogItem from "../blog/blog-item";
 
 class Blog extends Component {
   constructor() {
@@ -17,7 +19,7 @@ class Blog extends Component {
     })
     .then(response => {
       this.setState({
-        blogItems: response.data.porfolio_blogs
+        blogItems: response.data.portfolio_blogs
       });
     })
     .catch(error => {
@@ -30,13 +32,12 @@ class Blog extends Component {
   }
 
   render() {
+    const blogRecords = this.state.blogItems.map(blogItem =>{
+      return <BlogItem key={blogItem.id} blogItem={blogItem}/>;
+    });
     return (
       <div>
-        <h2>Blog</h2>
-
-        <div>
-          <Link to="/about-me">Read more about myself</Link>
-        </div>
+         {blogRecords}
       </div>
     );
   }
