@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from "axios";
 
 export default class BlogForm extends Component {
 
@@ -14,33 +15,54 @@ export default class BlogForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleSubmit(event){
-        this.props.handleSuccessfullFormSubmission(this.state);
+    buildForm() {
+        let formData = new FormData();
+
+        formData.append("portfolio_blog[title]", this.state.title);
+        formData.append("portfolio_blog[blog_status]", this.state.blog_status);
+
+        return formData;
+    }
+
+    handleSubmit(event) {
+        axios
+            .post(
+                "https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs",
+                this.buildForm(),
+                { withCredentials: true }
+            )
+            .then(response =>{
+                this.props.handleSuccessfullFormSubmission(response.data);
+            })
+            .catch(error =>{
+                console.log("handleSubmit error", error);
+            })
+        
         event.preventDefault();
     }
 
     handleChange(event) {
         this.setState({
-          [event.target.name]: event.target.value
+            [event.target.name]: event.target.value
         })
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     onChange={this.handleChange}
-                    name= "title"
+                    name="title"
                     placeholder="Blog Title"
-                    value = {this.state.title}
+                    value={this.state.title}
                 />
-                <input 
-                    type='text' 
+                <input
+                    type='text'
                     onChange={this.handleChange}
-                    name= "blog_status"
+                    name="blog_status"
                     placeholder='Blog Status'
-                    value = {this.state.blog_status}
+                    value={this.state.blog_status}
                 />
                 <button>Save</button>
             </form>
