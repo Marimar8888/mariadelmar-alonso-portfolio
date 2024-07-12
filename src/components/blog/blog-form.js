@@ -32,7 +32,7 @@ export default class BlogForm extends Component {
                 { withCredentials: true }
             )
             .then(response =>{
-                this.props.handleSuccessfullFormSubmission(response.data);
+                this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog);
             })
             .catch(error =>{
                 console.log("handleSubmit error", error);

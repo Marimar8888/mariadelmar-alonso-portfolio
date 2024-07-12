@@ -24,10 +24,11 @@ export default class BlogModal extends Component {
           };
         
         this.handleSuccessfullFormSubmission = this.handleSuccessfullFormSubmission.bind(this);
+        
     }
     
     handleSuccessfullFormSubmission(blog){
-        console.log("blog from blog form", blog)
+        this.props.handleSuccessfulNewBlogSubmission(blog);
     }
 
     render() {
