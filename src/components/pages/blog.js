@@ -25,7 +25,7 @@ class Blog extends Component {
       this
     );
   }
-  handleSuccessfulNewBlogSubmission(blog){
+  handleSuccessfulNewBlogSubmission(blog) {
     this.setState({
       modalBlogIsOpen: false,
       blogItems: [blog].concat(this.state.blogItems)
@@ -38,7 +38,7 @@ class Blog extends Component {
     });
   }
 
-  handleModalBlockClick(){
+  handleModalBlockClick() {
     this.setState({
       modalBlogIsOpen: true
     });
@@ -97,16 +97,19 @@ class Blog extends Component {
     });
     return (
       <div className='blog-container'>
-        <BlogModal 
-          modalIsOpen={this.state.modalBlogIsOpen} 
+        <BlogModal
+          modalIsOpen={this.state.modalBlogIsOpen}
           handleModalClose={this.handleModalClose}
           handleSuccessfulNewBlogSubmission={this.handleSuccessfulNewBlogSubmission}
         />
-        <div className="new-blog-link">
-          <a onClick={this.handleModalBlockClick} className="new-blog-link">
-            <FontAwesomeIcon icon="plus-circle" />
-          </a>
-        </div>
+
+        {this.props.loggedInStatus === "LOGGED_IN" ?
+          <div className="new-blog-link">
+            <a onClick={this.handleModalBlockClick} className="new-blog-link">
+              <FontAwesomeIcon icon="plus-circle" />
+            </a>
+          </div> : null}
+
         <div className='content-container'>{blogRecords}</div>
         {this.state.isLoading ? (
           <div className="content-loader">
