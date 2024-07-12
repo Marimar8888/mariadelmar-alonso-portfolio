@@ -3,6 +3,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import BlogItem from "../blog/blog-item";
+import BlogModal from "../modals/blog-modal";
 
 
 class Blog extends Component {
@@ -12,11 +13,26 @@ class Blog extends Component {
       blogItems: [],
       totalCount: 0,
       currentPage: 0,
-      isLoading: true
+      isLoading: true,
+      modalBlogIsOpen: false
     }
     this.getBlogItems = this.getBlogItems.bind(this);
     this.onScroll = this.onScroll.bind(this);
     window.addEventListener("scroll", this.onScroll, false);
+    this.handleModalBlockClick = this.handleModalBlockClick.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+  }
+
+  handleModalClose() {
+    this.setState({
+      modalBlogIsOpen: false
+    });
+  }
+
+  handleModalBlockClick(){
+    this.setState({
+      modalBlogIsOpen: true
+    });
   }
 
   onScroll() {
@@ -72,6 +88,11 @@ class Blog extends Component {
     });
     return (
       <div className='blog-container'>
+        <BlogModal 
+          modalIsOpen={this.state.modalBlogIsOpen} 
+          handleModalClose={this.handleModalClose}
+        />
+        <a onClick={this.handleModalBlockClick}>Open Modal!</a>
         <div className='content-container'>{blogRecords}</div>
         {this.state.isLoading ? (
           <div className="content-loader">
