@@ -102,7 +102,11 @@ class Blog extends Component {
           handleModalClose={this.handleModalClose}
           handleSuccessfulNewBlogSubmission={this.handleSuccessfulNewBlogSubmission}
         />
-        <a onClick={this.handleModalBlockClick}>Open Modal!</a>
+        <div className="new-blog-link">
+          <a onClick={this.handleModalBlockClick} className="new-blog-link">
+            <FontAwesomeIcon icon="plus-circle" />
+          </a>
+        </div>
         <div className='content-container'>{blogRecords}</div>
         {this.state.isLoading ? (
           <div className="content-loader">
