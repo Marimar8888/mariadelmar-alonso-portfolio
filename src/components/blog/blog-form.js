@@ -20,7 +20,7 @@ export default class BlogForm extends Component {
     }
 
     handleRichTextEditorChange(content){
-        this.setState({ content })
+        this.setState({ content });
     }
 
     buildForm() {
