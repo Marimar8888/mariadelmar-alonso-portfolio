@@ -13,6 +13,7 @@ export default class BlogForm extends Component {
             title: "",
             blog_status: "",
             content: "",
+            featured_image: ""
 
         };
 
@@ -22,6 +23,7 @@ export default class BlogForm extends Component {
         this.componentConfig = this.componentConfig.bind(this);
         this.djsConfig = this.djsConfig.bind(this);
         this.handleFeaturedImageDrop = this.handleFeaturedImageDrop.bind(this);
+        this.featured_imageRef = React.createRef();
     }
 
     componentConfig(){
@@ -57,6 +59,10 @@ export default class BlogForm extends Component {
         formData.append("portfolio_blog[blog_status]", this.state.blog_status);
         formData.append("portfolio_blog[content]", this.state.content);
 
+        if(this.state.featured_image){
+            formData.append("portfolio_blog[featured_image]", this.state.featured_image);
+        }
+
         return formData;
     }
 
@@ -68,11 +74,18 @@ export default class BlogForm extends Component {
                 { withCredentials: true }
             )
             .then(response => {
+
                 this.setState({
                     title: "",
                     blog_status: "",
-                    content: ""
+                    content: "",
+                    featured_image: ""
                   });
+
+                if(this.featured_imageRef){
+                    this.featured_imageRef.current.dropzone.removeAllFiles();
+                }  
+                  
                 this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog);
             })
             .catch(error => {
@@ -117,6 +130,7 @@ export default class BlogForm extends Component {
 
                 <div className="image-uploaders">
                     <DropzoneComponent
+                        ref={this.featured_imageRef}
                         config={this.componentConfig()}
                         djsConfig={this.djsConfig()}
                         eventHandlers={this.handleFeaturedImageDrop()}
