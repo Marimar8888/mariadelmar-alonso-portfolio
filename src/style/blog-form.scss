@@ -18,6 +18,11 @@
         grid-template-columns: 1fr;
     }
 
+    .image-uploaders {
+        @include base-grid();
+        grid-template-columns: 200px;
+      }
+
     .button-wrapper {
         display: flex;
         justify-content: center;
