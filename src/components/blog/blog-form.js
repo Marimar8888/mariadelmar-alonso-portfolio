@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import axios from "axios";
-import { DropzoneComponent } from 'react-dropzone-component';
+import DropzoneComponent from "react-dropzone-component";
 
-import RichTextEditor from '../form/rich-text-editor';
+import RichTextEditor from "../form/rich-text-editor";
 
 export default class BlogForm extends Component {
-
     constructor(props) {
         super(props);
 
@@ -15,25 +14,41 @@ export default class BlogForm extends Component {
             blog_status: "",
             content: "",
             featured_image: ""
-
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleRichTextEditorChange = this.handleRichTextEditorChange.bind(this);
+        this.handleRichTextEditorChange = this.handleRichTextEditorChange.bind(
+            this
+        );
+
         this.componentConfig = this.componentConfig.bind(this);
         this.djsConfig = this.djsConfig.bind(this);
         this.handleFeaturedImageDrop = this.handleFeaturedImageDrop.bind(this);
-        this.featured_imageRef = React.createRef();
+        this.deleteImage = this.deleteImage.bind(this);
+        this.featuredImageRef = React.createRef();
+    }
+    deleteImage(imageType) {
+        axios
+            .delete(
+                `https://alonsomarimar.devcamp.space/portfolio/delete-portfolio-blog-image/${this.props.blog.id
+                }?image_type=${imageType}`,
+                { withCredentials: true }
+            )
+            .then(response => {
+                this.props.handleFeaturedImageDelete();
+            })
+            .catch(error => {
+                console.log("deleteImage error", error);
+            });
     }
 
-    componentDidMount() {
-        const { blog } = this.props;
-        if (this.props.editMode && blog) {
+    componentWillMount() {
+        if (this.props.editMode) {
             this.setState({
-                id: blog.id || "",
-                title: blog.title || "",
-                blog_status: blog.blog_status || "",
-                content: blog.content || ""
+                id: this.props.blog.id,
+                title: this.props.blog.title,
+                status: this.props.blog.status
             });
         }
     }
@@ -59,7 +74,6 @@ export default class BlogForm extends Component {
         };
     }
 
-
     handleRichTextEditorChange(content) {
         this.setState({ content });
     }
@@ -72,15 +86,16 @@ export default class BlogForm extends Component {
         formData.append("portfolio_blog[content]", this.state.content);
 
         if (this.state.featured_image) {
-            formData.append("portfolio_blog[featured_image]", this.state.featured_image);
+            formData.append(
+                "portfolio_blog[featured_image]",
+                this.state.featured_image
+            );
         }
 
         return formData;
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-
         axios
             .post(
                 "https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs",
@@ -88,6 +103,9 @@ export default class BlogForm extends Component {
                 { withCredentials: true }
             )
             .then(response => {
+                if (this.state.featured_image) {
+                    this.featuredImageRef.current.dropzone.removeAllFiles();
+                }
 
                 this.setState({
                     title: "",
@@ -96,21 +114,21 @@ export default class BlogForm extends Component {
                     featured_image: ""
                 });
 
-                if (this.featured_imageRef) {
-                    this.featured_imageRef.current.dropzone.removeAllFiles();
-                }
-
-                this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog);
+                this.props.handleSuccessfullFormSubmission(
+                    response.data.portfolio_blog
+                );
             })
             .catch(error => {
-                console.log("handleSubmit error", error);
-            })
+                console.log("handleSubmit for blog error", error);
+            });
+
+        event.preventDefault();
     }
 
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
-        })
+        });
     }
 
     render() {
@@ -152,7 +170,9 @@ export default class BlogForm extends Component {
                             <img src={this.props.blog.featured_image_url} />
 
                             <div className="image-removal-link">
-                                <a>Remove file</a>
+                                <a onClick={() => this.deleteImage("featured_image")}>
+                                    Remove file
+                                </a>
                             </div>
                         </div>
                     ) : (
@@ -167,11 +187,8 @@ export default class BlogForm extends Component {
                     )}
                 </div>
 
-
-                <div className="button-wrapper">
-                    <button className="btn">Save</button>
-                </div>
+                <button className="btn">Save</button>
             </form>
-        )
+        );
     }
 }

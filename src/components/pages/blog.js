@@ -1,46 +1,48 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import axios from "axios";
 import BlogItem from "../blog/blog-item";
 import BlogModal from "../modals/blog-modal";
-
 
 class Blog extends Component {
   constructor() {
     super();
+
     this.state = {
       blogItems: [],
       totalCount: 0,
       currentPage: 0,
       isLoading: true,
-      modalBlogIsOpen: false
-    }
+      blogModalIsOpen: false
+    };
+
     this.getBlogItems = this.getBlogItems.bind(this);
     this.onScroll = this.onScroll.bind(this);
     window.addEventListener("scroll", this.onScroll, false);
-    this.handleModalBlockClick = this.handleModalBlockClick.bind(this);
+    this.handleNewBlogClick = this.handleNewBlogClick.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
     this.handleSuccessfulNewBlogSubmission = this.handleSuccessfulNewBlogSubmission.bind(
       this
     );
   }
+
   handleSuccessfulNewBlogSubmission(blog) {
     this.setState({
-      modalBlogIsOpen: false,
+      blogModalIsOpen: false,
       blogItems: [blog].concat(this.state.blogItems)
-    })
+    });
   }
 
   handleModalClose() {
     this.setState({
-      modalBlogIsOpen: false
+      blogModalIsOpen: false
     });
   }
 
-  handleModalBlockClick() {
+  handleNewBlogClick() {
     this.setState({
-      modalBlogIsOpen: true
+      blogModalIsOpen: true
     });
   }
 
@@ -57,9 +59,6 @@ class Blog extends Component {
       document.documentElement.offsetHeight
     ) {
       this.getBlogItems();
-      this.setState({
-        isLoading: true
-      });
     }
   }
 
@@ -68,10 +67,16 @@ class Blog extends Component {
       currentPage: this.state.currentPage + 1
     });
 
-    axios.get(`https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs?page=${this.state.currentPage}`, {
-      withCredentials: true
-    })
+    axios
+      .get(
+        `https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs?page=${this
+          .state.currentPage}`,
+        {
+          withCredentials: true
+        }
+      )
       .then(response => {
+        console.log("gettting", response.data);
         this.setState({
           blogItems: this.state.blogItems.concat(response.data.portfolio_blogs),
           totalCount: response.data.meta.total_records,
@@ -83,7 +88,7 @@ class Blog extends Component {
       });
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getBlogItems();
   }
 
@@ -95,22 +100,27 @@ class Blog extends Component {
     const blogRecords = this.state.blogItems.map(blogItem => {
       return <BlogItem key={blogItem.id} blogItem={blogItem} />;
     });
+
     return (
-      <div className='blog-container'>
+      <div className="blog-container">
         <BlogModal
-          modalIsOpen={this.state.modalBlogIsOpen}
+          handleSuccessfulNewBlogSubmission={
+            this.handleSuccessfulNewBlogSubmission
+          }
           handleModalClose={this.handleModalClose}
-          handleSuccessfulNewBlogSubmission={this.handleSuccessfulNewBlogSubmission}
+          modalIsOpen={this.state.blogModalIsOpen}
         />
 
-        {this.props.loggedInStatus === "LOGGED_IN" ?
+        {this.props.loggedInStatus === "LOGGED_IN" ? (
           <div className="new-blog-link">
-            <a onClick={this.handleModalBlockClick} className="new-blog-link">
+            <a onClick={this.handleNewBlogClick}>
               <FontAwesomeIcon icon="plus-circle" />
             </a>
-          </div> : null}
+          </div>
+        ) : null}
 
-        <div className='content-container'>{blogRecords}</div>
+        <div className="content-container">{blogRecords}</div>
+
         {this.state.isLoading ? (
           <div className="content-loader">
             <FontAwesomeIcon icon="spinner" spin />

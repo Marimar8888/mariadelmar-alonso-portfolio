@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 import ReactHtmlParser from "react-html-parser";
 
-import BlogFeaturedImage from '../blog/blog-featured-image';
-import BlogForm from '../blog/blog-form';
+import BlogForm from "../blog/blog-form";
+import BlogFeaturedImage from "../blog/blog-featured-image";
 
-
-export default class BlogDetails extends Component {
+export default class BlogDetail extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       currentId: this.props.match.params.slug,
       blogItem: {},
@@ -16,16 +16,28 @@ export default class BlogDetails extends Component {
     };
 
     this.handleEditClick = this.handleEditClick.bind(this);
+    this.handleFeaturedImageDelete = this.handleFeaturedImageDelete.bind(this);
+  }
+
+  handleFeaturedImageDelete() {
+    this.setState({
+      blogItem: {
+        featured_image_url: ""
+      }
+    });
   }
 
   handleEditClick() {
-    this.setState({ editMode: true })
+    console.log("handle edit clicked");
+    this.setState({ editMode: true });
   }
 
   getBlogItem() {
     axios
-      .get(`https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs/${this.state.currentId}`
-
+      .get(
+        `https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs/${
+          this.state.currentId
+        }`
       )
       .then(response => {
         this.setState({
@@ -42,7 +54,6 @@ export default class BlogDetails extends Component {
   }
 
   render() {
-
     const {
       title,
       content,
@@ -52,7 +63,13 @@ export default class BlogDetails extends Component {
 
     const contentManager = () => {
       if (this.state.editMode) {
-        return <BlogForm editMode={this.state.editMode} blog={this.state.blogItem}/>;
+        return (
+          <BlogForm
+            handleFeaturedImageDelete={this.handleFeaturedImageDelete}
+            editMode={this.state.editMode}
+            blog={this.state.blogItem}
+          />
+        );
       } else {
         return (
           <div className="content-container">
@@ -66,8 +83,6 @@ export default class BlogDetails extends Component {
       }
     };
 
-    return (
-      <div className='blog-container'>{contentManager()}</div>
-    )
+    return <div className="blog-container">{contentManager()}</div>;
   }
 }

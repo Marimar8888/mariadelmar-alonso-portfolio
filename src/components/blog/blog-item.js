@@ -1,18 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import striptags from 'striptags';
-import Truncate from 'react-truncate';
+import React from "react";
+import { Link } from "react-router-dom";
+import striptags from "striptags";
+import Truncate from "react-truncate";
 
-const blogItem = props => {
+const BlogItem = props => {
   const {
     id,
-    title,
-    content,
     blog_status,
-    featured_image
+    content,
+    title,
+    featured_image_url
+  } = props.blogItem;
 
-  }= props.blogItem;
-  
   return (
     <div>
       <Link to={`/b/${id}`}>
@@ -29,9 +28,9 @@ const blogItem = props => {
         >
           {striptags(content)}
         </Truncate>
-        </div>
+      </div>
     </div>
   );
 };
 
-export default blogItem;
+export default BlogItem;
