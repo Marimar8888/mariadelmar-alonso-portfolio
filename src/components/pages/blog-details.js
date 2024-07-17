@@ -41,8 +41,6 @@ export default class BlogDetails extends Component {
     this.getBlogItem();
   }
 
-
-
   render() {
 
     const {
@@ -52,11 +50,9 @@ export default class BlogDetails extends Component {
       blog_status
     } = this.state.blogItem;
 
-    const { blogItem, editMode } = this.state;
-
     const contentManager = () => {
       if (this.state.editMode) {
-        return <BlogForm editMode={this.state.editMode} blog={blogItem}/>;
+        return <BlogForm editMode={this.state.editMode} blog={this.state.blogItem}/>;
       } else {
         return (
           <div className="content-container">

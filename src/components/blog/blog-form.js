@@ -140,22 +140,32 @@ export default class BlogForm extends Component {
                         editMode={this.props.editMode}
                         contentToEdit={
                             this.props.editMode && this.props.blog.content
-                            ? this.props.blog.content
-                            : null
+                                ? this.props.blog.content
+                                : null
                         }
                     />
                 </div>
 
-                <div className="image-uploaders">
-                    <DropzoneComponent
-                        ref={this.featured_imageRef}
-                        config={this.componentConfig()}
-                        djsConfig={this.djsConfig()}
-                        eventHandlers={this.handleFeaturedImageDrop()}
-                    >
-                        <           div className="dz-message">Featured Image</div>
-                    </DropzoneComponent>
-                </div>
+                {<div className="image-uploaders">
+                    {this.props.editMode && this.props.blog.featured_image_url ? (
+                        <div className="portfolio-manager-image-wrapper">
+                            <img src={this.props.blog.featured_image_url} />
+
+                            <div className="image-removal-link">
+                                <a>Remove file</a>
+                            </div>
+                        </div>
+                    ) : (
+                        <DropzoneComponent
+                            ref={this.featuredImageRef}
+                            config={this.componentConfig()}
+                            djsConfig={this.djsConfig()}
+                            eventHandlers={this.handleFeaturedImageDrop()}
+                        >
+                            <div className="dz-message">Featured Image</div>
+                        </DropzoneComponent>
+                    )}
+                </div>}
 
                 <div className="button-wrapper">
                     <button className="btn">Save</button>
