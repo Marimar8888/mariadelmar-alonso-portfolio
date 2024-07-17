@@ -146,9 +146,9 @@ export default class BlogForm extends Component {
                     />
                 </div>
 
-                {<div className="image-uploaders">
+                <div className="image-uploaders">
                     {this.props.editMode && this.props.blog.featured_image_url ? (
-                        <div className="portfolio-manager-image-wrapper">
+                        <div className="blog-manager-image-wrapper">
                             <img src={this.props.blog.featured_image_url} />
 
                             <div className="image-removal-link">
@@ -165,7 +165,8 @@ export default class BlogForm extends Component {
                             <div className="dz-message">Featured Image</div>
                         </DropzoneComponent>
                     )}
-                </div>}
+                </div>
+
 
                 <div className="button-wrapper">
                     <button className="btn">Save</button>

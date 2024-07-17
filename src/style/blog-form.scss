@@ -21,6 +21,15 @@
     .image-uploaders {
         @include base-grid();
         grid-template-columns: 200px;
+
+        .blog-manager-image-wrapper {
+            width: 200px;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
       }
 
     .button-wrapper {
