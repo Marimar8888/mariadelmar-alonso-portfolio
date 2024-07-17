@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
-import { resolve } from "path";
-import { rejects } from "assert";
+
 
 export default class RichTextEditor extends Component {
 
@@ -19,6 +18,19 @@ export default class RichTextEditor extends Component {
         this.uploadFile = this.uploadFile.bind(this);
     }
 
+    componentDidMount() {
+        if (this.props.editMode && this.props.contentToEdit) {
+            const blocksFromHtml = htmlToDraft(this.props.contentToEdit);
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(
+                contentBlocks,
+                entityMap
+            );
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({ editorState });
+        }
+    }
+
 
     onEditorStateChange(editorState) {
         this.setState(
@@ -31,17 +43,17 @@ export default class RichTextEditor extends Component {
         );
     }
 
-    
+
     getBase64(file, callback) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => callback(reader.result);
-        reader.onerror = error => {};
+        reader.onerror = error => { };
     }
 
     uploadFile(file) {
         return new Promise((resolve, reject) => {
-          this.getBase64(file, data => resolve({ data: { link: data } }));
+            this.getBase64(file, data => resolve({ data: { link: data } }));
         });
     }
 
@@ -54,7 +66,7 @@ export default class RichTextEditor extends Component {
                     wrapperClassName='demo-wrapper'
                     editorClassName='demo-editor'
                     onEditorStateChange={this.onEditorStateChange}
-                    toolbar = {{
+                    toolbar={{
                         inline: { inDropdown: true },
                         list: { inDropdown: true },
                         textAlign: { inDropdown: true },

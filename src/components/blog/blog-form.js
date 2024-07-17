@@ -10,13 +10,13 @@ export default class BlogForm extends Component {
         super(props);
 
         this.state = {
+            id: "",
             title: "",
             blog_status: "",
             content: "",
             featured_image: ""
 
         };
-
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRichTextEditorChange = this.handleRichTextEditorChange.bind(this);
@@ -26,7 +26,19 @@ export default class BlogForm extends Component {
         this.featured_imageRef = React.createRef();
     }
 
-    componentConfig(){
+    componentDidMount() {
+        const { blog } = this.props;
+        if (this.props.editMode && blog) {
+            this.setState({
+                id: blog.id || "",
+                title: blog.title || "",
+                blog_status: blog.blog_status || "",
+                content: blog.content || ""
+            });
+        }
+    }
+
+    componentConfig() {
         return {
             iconFiletypes: [".jpg", ".png"],
             showFiletypeIcon: true,
@@ -34,21 +46,21 @@ export default class BlogForm extends Component {
         };
     }
 
-    djsConfig(){
-        return{
+    djsConfig() {
+        return {
             addRemoveLinks: true,
             maxFiles: 1
         };
     }
 
-    handleFeaturedImageDrop(){
+    handleFeaturedImageDrop() {
         return {
             addedfile: file => this.setState({ featured_image: file })
         };
     }
 
 
-    handleRichTextEditorChange(content){
+    handleRichTextEditorChange(content) {
         this.setState({ content });
     }
 
@@ -59,7 +71,7 @@ export default class BlogForm extends Component {
         formData.append("portfolio_blog[blog_status]", this.state.blog_status);
         formData.append("portfolio_blog[content]", this.state.content);
 
-        if(this.state.featured_image){
+        if (this.state.featured_image) {
             formData.append("portfolio_blog[featured_image]", this.state.featured_image);
         }
 
@@ -67,6 +79,8 @@ export default class BlogForm extends Component {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
+
         axios
             .post(
                 "https://alonsomarimar.devcamp.space/portfolio/portfolio_blogs",
@@ -80,19 +94,17 @@ export default class BlogForm extends Component {
                     blog_status: "",
                     content: "",
                     featured_image: ""
-                  });
+                });
 
-                if(this.featured_imageRef){
+                if (this.featured_imageRef) {
                     this.featured_imageRef.current.dropzone.removeAllFiles();
-                }  
-                  
+                }
+
                 this.props.handleSuccessfullFormSubmission(response.data.portfolio_blog);
             })
             .catch(error => {
                 console.log("handleSubmit error", error);
             })
-
-        event.preventDefault();
     }
 
     handleChange(event) {
@@ -123,8 +135,14 @@ export default class BlogForm extends Component {
                 </div>
 
                 <div className="one-column">
-                    <RichTextEditor 
+                    <RichTextEditor
                         handleRichTextEditorChange={this.handleRichTextEditorChange}
+                        editMode={this.props.editMode}
+                        contentToEdit={
+                            this.props.editMode && this.props.blog.content
+                            ? this.props.blog.content
+                            : null
+                        }
                     />
                 </div>
 
@@ -135,7 +153,7 @@ export default class BlogForm extends Component {
                         djsConfig={this.djsConfig()}
                         eventHandlers={this.handleFeaturedImageDrop()}
                     >
-            <           div className="dz-message">Featured Image</div>
+                        <           div className="dz-message">Featured Image</div>
                     </DropzoneComponent>
                 </div>
 
