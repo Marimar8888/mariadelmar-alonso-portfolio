@@ -26,6 +26,17 @@
         flex-direction: column;
         width: 800px;
 
+        .admin-blog-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          
+            a {
+              margin-left: 15px;
+              cursor: pointer;
+            }
+          }
+
         .featured-image-wrapper {
             img {
                 margin: 15px 0px;
