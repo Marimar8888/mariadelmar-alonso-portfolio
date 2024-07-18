@@ -25,7 +25,7 @@ export default class App extends Component {
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN"
     };
-    
+
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this);
@@ -52,7 +52,7 @@ export default class App extends Component {
 
 
   checkLoginStatus() {
-     return axios
+    return axios
       .get("https://api.devcamp.space/logged_in", {
         withCredentials: true
       })
@@ -80,8 +80,8 @@ export default class App extends Component {
   componentDidMount() {
     this.checkLoginStatus();
   }
-  
-  authorizedPages(){
+
+  authorizedPages() {
     return [<Route key="portfolio-manager" path="/portfolio-manager" component={PortfolioManager} />];
   }
 
@@ -90,9 +90,9 @@ export default class App extends Component {
       <div className="container">
         <Router>
           <div>
-            <NavigationContainer 
+            <NavigationContainer
               loggedInStatus={this.state.loggedInStatus}
-              handleSuccessfulLogout={this.handleSuccessfulLogout} 
+              handleSuccessfulLogout={this.handleSuccessfulLogout}
             />
             <Switch>
               <Route exact path="/" component={Home} />
@@ -109,14 +109,19 @@ export default class App extends Component {
 
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={Contact} />
-              <Route path="/b/:slug" component={BlogDetails} />
-              <Route 
-                path="/blog" 
+              <Route
+                path="/blog"
                 render={props => (
                   <Blog {...props} loggedInStatus={this.state.loggedInStatus} />
-                )}            
+                )}
               />
-
+              <Route
+                path="/b/:slug"
+                render={props => (
+                  <BlogDetails {...props} loggedInStatus={this.state.loggedInStatus}
+                  />
+                )}
+              />
               {this.state.loggedInStatus === "LOGGED_IN" ? (this.authorizedPages()) : null}
               <Route
                 exact
