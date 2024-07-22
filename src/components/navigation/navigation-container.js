@@ -53,7 +53,7 @@ const NavigationComponent = (props) => {
         {props.loggedInStatus === "LOGGED_IN" ? (
           <a onClick={handleSignOut}>
             <FontAwesomeIcon icon="sign-out-alt" />
-          </a>) : null}
+          </a>) : <NavLink to="/auth"><FontAwesomeIcon icon="door-open" /></NavLink>}
       </div>
     </div>
   );
