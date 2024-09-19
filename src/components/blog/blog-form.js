@@ -20,10 +20,7 @@ export default class BlogForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleRichTextEditorChange = this.handleRichTextEditorChange.bind(
-            this
-        );
-
+        this.handleRichTextEditorChange = this.handleRichTextEditorChange.bind(this);
         this.componentConfig = this.componentConfig.bind(this);
         this.djsConfig = this.djsConfig.bind(this);
         this.handleFeaturedImageDrop = this.handleFeaturedImageDrop.bind(this);
@@ -83,20 +80,25 @@ export default class BlogForm extends Component {
     }
 
     buildForm() {
-        let formData = new FormData();
-
-        formData.append("portfolio_blog[title]", this.state.title);
-        formData.append("portfolio_blog[blog_status]", this.state.blog_status);
-        formData.append("portfolio_blog[content]", this.state.content);
-
-        if (this.state.featured_image) {
-            formData.append(
-                "portfolio_blog[featured_image]",
-                this.state.featured_image
-            );
+        let studentFormData = new FormData();
+    
+        studentFormData.append("students_first_name", this.state.students_first_name);
+        studentFormData.append("students_last_name", this.state.students_last_name);
+        studentFormData.append("students_email", this.state.students_email);
+        studentFormData.append("students_dni", this.state.students_dni);
+        studentFormData.append("students_address", this.state.students_address);
+        studentFormData.append("students_city", this.state.students_city);
+        studentFormData.append("students_postal", this.state.students_postal);
+        studentFormData.append("students_number_card", this.state.students_number_card);
+        studentFormData.append("students_exp_date", this.state.students_exp_date);
+        studentFormData.append("students_cvc", this.state.students_cvc);
+    
+        // Si hay un campo opcional o condicional
+        if (this.state.students_user_id) {
+          studentFormData.append("students_user_id", this.state.students_user_id);
         }
-
-        return formData;
+    
+        return studentFormData;
     }
 
     handleSubmit(event) {
